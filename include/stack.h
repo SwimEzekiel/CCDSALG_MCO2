@@ -1,6 +1,5 @@
 typedef struct { //Stack itself.
-    Value *collection;
-    char type;
+    int *collection;
     int limit;
     int size;
 } Stack;

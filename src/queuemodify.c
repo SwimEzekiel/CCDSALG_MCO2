@@ -20,19 +20,13 @@ Queue *createQueue(){
     Puts a value inside a queue, returns void
     Parameters:
     Queue *queue - pointer to a queue
-    void* value - accepts any data types
-    char dataType - determines the data type of the parameter value.
+    int value - value to be put in the queue
 */
-void enqueue(Queue *queue, void* value, char dataType){
+void enqueue(Queue *queue, int value){
     Node *newnode = malloc(sizeof(Node)); //allocates memory for the new node
 
-    switch(dataType){ //places the value inside the Value struct depending on data type
-        case 'i': newnode->value.i = *(int*)value; break;
-        case 'c': newnode->value.c = *(char*)value; break;
-        case 's': strcpy(newnode->value.s, (char *)value); break;
-    }
+    newnode->value = value;
     newnode->next = NULL;
-    newnode->type = dataType;
 
     if (isQueueEmpty(queue)){ //since there'll be only one value, that value is both the head and tail
         queue->head = newnode;
@@ -50,8 +44,8 @@ void enqueue(Queue *queue, void* value, char dataType){
     Parameter:
     Queue *queue - pointer to a queue
 */
-Value dequeue(Queue *queue){
-    Value result = queue->head->value;
+int dequeue(Queue *queue){
+    int result = queue->head->value;
 
     Node *oldhead = queue->head;
 

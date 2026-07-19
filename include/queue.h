@@ -1,6 +1,5 @@
 typedef struct Node {
-    Value value; //Keeps a value struct
-    char type;   //determines what value to be used in the struct
+    int value; //Keeps an int value
     struct Node *next;  //Pointer to the next node
 } Node;
 
@@ -12,15 +11,11 @@ typedef struct { //The queue itself
 
 //functions inside queue_modify.c
 Queue *createQueue();
-void enqueue(Queue *queue, void* value, char dataType);
-Value dequeue(Queue *queue);
+void enqueue(Queue *queue, int value);
+int dequeue(Queue *queue);
 
 //functions inside queue_check.c
 int size(Queue *queue);
 int isQueueEmpty(Queue *queue);
-Value peekQueue(Queue *queue, int *status);
+int peekQueue(Queue *queue, int *status);
 void destroyQueue(Queue *queue);
-
-//functions for conversion and evaluation
-void convertToPostfix(string equation, Queue *main);
-int evaluatePostfix(Queue *postfix, int *error);

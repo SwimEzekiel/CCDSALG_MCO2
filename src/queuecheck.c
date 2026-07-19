@@ -27,16 +27,14 @@ int isQueueEmpty(Queue *queue){
     Queue *queue - returns the value of the head without
                    removing the value itself unlike in dequeue()
 */
-Value peekQueue(Queue *queue, int *status){
-    Value empty;
-    empty.i = -1;
-    empty.c = ' ';
-    strcpy(empty.s, "\0");
+int peekQueue(Queue *queue, int *status){
+    int value = 0;
     if (isQueueEmpty(queue)){
         *status = 0; //cannot peak at queue if it's empty
-        return empty;
     } else {
         *status = 1;
-        return queue->head->value;
+        value = queue->head->value;
     }
+
+    return value;
 }
