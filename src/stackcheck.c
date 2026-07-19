@@ -1,42 +1,34 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/header.h"
-#include "../include/queue.h"
+#include "../include/stack.h"
 
 /*
-    Returns the size of the queue
+    Checks if stack is full
     Parameter:
-    Queue *queue - pointer to a queue
+    Stack *stack - pointer to a stack
 */
-int size(Queue *queue){
-    return queue->size;
+int isStackFull(Stack *stack){
+    return stack->limit == stack->size;
 }
 
 /*
-    Returns 1 if queue is empty, 0 if not by checking the queue size.
+    Checks if stack is empty
     Parameter:
-    Queue *queue - pointer to a queue
+    Stack *stack - pointer to a stack
 */
-int isQueueEmpty(Queue *queue){
-    return queue->size == 0 ? 1 : 0;
+int isStackEmpty(Stack *stack){ //returns 1 if empty, 0 if not
+    return stack->size == 0;
 }
 
 /*
-    "Peeks" for the value of the head
+    Checks for the value at the top of the stack, without removing it. returns the value if successful, 0 if not
     Parameter:
-    Queue *queue - returns the value of the head without
-                   removing the value itself unlike in dequeue()
+    Stack *stack - pointer to a stack
 */
-Value peekQueue(Queue *queue, int *status){
-    Value empty;
-    empty.i = -1;
-    empty.c = ' ';
-    strcpy(empty.s, "\0");
-    if (isQueueEmpty(queue)){
-        *status = 0; //cannot peak at queue if it's empty
-        return empty;
-    } else {
-        *status = 1;
-        return queue->head->value;
-    }
+int peekStack(Stack *stack){
+    if (isStackEmpty(stack))
+        return 0;
+
+    return stack->collection[stack->size];
 }
