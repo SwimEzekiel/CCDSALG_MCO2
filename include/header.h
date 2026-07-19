@@ -5,8 +5,3 @@ typedef struct { //Value inside of the node itself.
     char c;
     char s[3];
 } Value;
-
-typedef struct {
-    int *intArr;
-    char *charArr;
-} HeapArray;
