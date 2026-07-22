@@ -1,18 +1,28 @@
 #include "header.h"
 
-typedef struct {
+typedef struct Vertex Vertex;
+typedef struct Pair Pair;
+
+struct Vertex{
     string name;
     Vertex *nextVert;
     Pair *adj;
-} Vertex;
+};
 
-typedef struct {
+struct Pair{
 	string name;
 	int  weight;
 	Pair *next;
-} Pair;
+};
 
 typedef struct {
 	int vertNum;
     Vertex *adjList;
 } Graph;
+
+// Prototypes
+Graph* createGraph();
+void destroyGraph(Graph*);
+void destroyGraph(Graph*);
+void addVertex(Graph*, string);
+int addEdge(Graph*, string, string, int weight);

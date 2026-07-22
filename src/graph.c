@@ -1,9 +1,11 @@
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "../include/graph.h"
 
 Graph* createGraph(){
 	Graph *ret = malloc(sizeof(Graph));
-	ret->adjList = malloc(sizeof(Vertex));
+	ret->adjList = NULL;
 	ret->vertNum = 0;
 	return ret;
 }
@@ -30,7 +32,8 @@ void addVertex(Graph* g, string vName){
 	Vertex *new = malloc(sizeof(Vertex));
 
 	strcpy(new->name, vName);
-	new->adj = new->nextVert = NULL;
+	new->adj = NULL;
+	new->nextVert = NULL;
 
 	if (!g->vertNum)
 		g->adjList = new;
@@ -75,21 +78,24 @@ int addEdge(Graph *g, string src, string dst, int weight){
 	/***********************************************************************/
 	Pair *new = malloc(sizeof(Pair));
 	Vertex *targetVert = g->adjList;
-	Pair *prev;
+	Pair *prev = NULL;
 	strcpy(new->name, dst);
 	new->weight = weight;
 	new->next = NULL;
 
-	for (ctr = 0; ctr < srcIdx; ctr++){
+	for (ctr = 0; ctr < srcIdx; ctr++)
 		targetVert = targetVert->nextVert;
-		ctr++;
-	}
-	prev = targetVert->adj;
-
-	while (prev->next != NULL)
-		prev = prev->next;
 	
-	prev->next = new;
+	if (targetVert->adj == NULL){
+		targetVert->adj = new;
+	} else {
+		prev = targetVert->adj;
+		while (prev->next != NULL){
+			prev = prev->next;
+		}
+		prev->next = new;
+	}
+
 	return 0; // 0 means successful
 }
 

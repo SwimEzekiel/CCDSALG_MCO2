@@ -5,42 +5,53 @@
 #include "../include/heap.h"
 #include "../include/queue.h"
 #include "../include/stack.h"
+#include "../include/graph.h"
 
+void printVertices(Graph *g){
+    Vertex *cur = g->adjList;
+    while (cur != NULL){
+        printf(cur->name);
+        if (cur->nextVert != NULL) printf(", ");
+        cur = cur->nextVert;
+    }
+    printf("}\n");
+}
+void printEdges(Graph *g){
+    Vertex *curV = g->adjList;
+    Pair   *curP = NULL;
 
-void printHeap(Heap *heap)
-{
-    for (int i = 0; i < heap->size; ++i)
-        printf("%d ", heap->arr[i]);
-    printf("\n");
+    if (curV != NULL && curV->adj != NULL) curP = curV->adj;
+
+    while (curV != NULL){
+        curP = curV->adj;
+        while (curP != NULL){
+            printf("     (%s, %s, %d)\n", curV->name, curP->name, curP->weight);
+            curP = curP->next;
+        }
+        curV = curV->nextVert;
+    }
+    printf("}\n");
+}
+void printGraph(Graph *g){
+    printf("G = (V,E)\n");
+    printf("V = {");
+    printVertices(g);
+    printf("E = {");
+    printEdges(g);
 }
 
+
 int main(){
-    Heap *heap = createHeap(10);
-
-    insertHeap(heap, 56);
-    insertHeap(heap, 120432);
-    insertHeap(heap, 1435);
-    insertHeap(heap, 913);
-    insertHeap(heap, 2043);
-    insertHeap(heap, 23434235);
-
-    heapify(heap, 0);
-    printHeap(heap);
-
-    free(heap->arr);
-    free(heap);
-
-    Queue *queue = createQueue(6);
-    enqueue(queue, 534);
-    enqueue(queue, 65);
-    enqueue(queue, 534354);
-    enqueue(queue, 5345534);
-    enqueue(queue, 534687876);
-
-    Stack *stack = createStack(32);
-    push(stack, 34);
-    push(stack, 43523);
-    push(stack, 30987654);
-
-    return 0;
+    Graph *graph = createGraph();
+    printGraph(graph);
+    addVertex(graph, "Fonsi");
+    addVertex(graph, "Zik");
+    printGraph(graph);
+    addEdge(graph, "Fonsi", "Zik", 67);
+    printGraph(graph);
+    addVertex(graph, "Matthew");
+    addVertex(graph, "John Toby Agsangre Pickavant");
+    addEdge(graph, "Matthew", "John Toby Agsangre Pickavant", 69);
+    addEdge(graph, "Matthew", "Fonsi", 1);
+    printGraph(graph);
 }
