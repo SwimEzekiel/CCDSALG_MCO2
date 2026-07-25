@@ -39,9 +39,30 @@ void addVertex(Graph* g, string vName){
 		g->adjList = new;
 	else {
 		Vertex *cur = g->adjList;
-		while (cur->nextVert != NULL)
-			cur = cur->nextVert;
-		cur->nextVert = new;
+		Vertex *prev = NULL;
+		int diff = strcmp(vName, cur->name);
+		while (diff > 0 && cur != NULL){
+			diff = strcmp(vName, cur->name);
+
+			if (diff > 0) {
+				prev = cur;
+				cur = cur->nextVert;
+			}
+		}
+		
+		if (diff == 0) printf("Vertex already exists.\n");
+		else if (prev == NULL) { // New must be first vert: works!
+			printf("Must be first vert!\n");
+			new->nextVert = g->adjList;
+			g->adjList = new;
+		} else if (cur == NULL) { // New must be last vert
+			printf("Must be last vert!\n");
+			prev->nextVert = new;
+		} else { // Somewhere in between
+			printf("Somewhere in between!\n");
+			prev->nextVert = new;
+			new->nextVert = cur;
+		}
 	}
 	g->vertNum++;
 }
