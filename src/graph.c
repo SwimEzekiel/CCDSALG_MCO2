@@ -46,37 +46,24 @@ void addVertex(Graph* g, string vName){
 	g->vertNum++;
 }
 
-int addEdge(Graph *g, string src, string dst, int weight){
-	if (weight < 0) return 1; 
-	else if (weight > 100) return 1; // error 1: weight must be in bounds
-
-	int srcIdx = -1;
+// Don't forget to use this for validation!
+int findVertex(Graph *g, string vert){
+	int idx = -1;
 	int ctr = 0;
+
 	Vertex *cur = g->adjList;
-	while (srcIdx == -1 && cur != NULL){
-		if (!strcmp(src, cur->name)) srcIdx = ctr;
+	while (idx == -1 && cur != NULL){
+		if (!strcmp(vert, cur->name)) idx = ctr;
 		else {
 			ctr++;
 			cur = cur->nextVert;
 		}
 	}
 
-	if (srcIdx == -1) return 2; // error 2: source vertex not in adjList
+	return idx;
+}
 
-	int dstIdx = -1;
-	ctr = 0;
-	cur = g->adjList;
-	while (dstIdx == -1 && cur != NULL){
-		if (!strcmp(dst, cur->name)) dstIdx = ctr;
-		else {
-			ctr++;
-			cur = cur->nextVert;
-		}
-	}
-
-	if (dstIdx == -1) return 3; // error 3: dest vertex not in adjList
-
-	/***********************************************************************/
+int addEdge(Graph *g, int srcIdx, string dst, int weight){
 	Pair *new = malloc(sizeof(Pair));
 	Vertex *targetVert = g->adjList;
 	Pair *prev = NULL;
@@ -84,7 +71,7 @@ int addEdge(Graph *g, string src, string dst, int weight){
 	new->weight = weight;
 	new->next = NULL;
 
-	for (ctr = 0; ctr < srcIdx; ctr++)
+	for (int ctr = 0; ctr < srcIdx; ctr++)
 		targetVert = targetVert->nextVert;
 	
 	if (targetVert->adj == NULL){

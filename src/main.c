@@ -23,9 +23,10 @@ void printEdges(Graph *g){
     if (curV != NULL && curV->adj != NULL) curP = curV->adj;
 
     while (curV != NULL){
+        if(curV == g->adjList && curV->adj != NULL) printf("\n"); // Runs only on first edge!
         curP = curV->adj;
         while (curP != NULL){
-            printf("     (%s, %s, %d)\n", curV->name, curP->name, curP->weight);
+            printf("     (%s, %s, %d),\n", curV->name, curP->name, curP->weight);
             curP = curP->next;
         }
         curV = curV->nextVert;
@@ -47,7 +48,7 @@ void flush(){
 
 int main(){
     Graph *graph = createGraph();
-    int command = 0, weight, err;
+    int command = 0, weight, srcIdx;
     string input1 = "", input2 = "";
 
     do {
@@ -60,10 +61,10 @@ int main(){
                 break;
             case 2:
                 scanf(" %256s %256s %d", input1, input2, &weight);
-                err = addEdge(graph, input1, input2, weight);
-                if (err == 1) printf("Weight must be 1-100 only.\n");
-                else if (err == 2) printf("Source vertex does not exist in graph.\n");
-                else if (err == 3) printf("Dest. vertex does not exist in graph.\n");
+                if (weight < 1 || weight > 100) printf("Weight must be from 1-100 only.\n");
+                else if ((srcIdx = findVertex(graph, input1)) == -1) printf("Source vertex does not exist in graph.\n");
+                else if (findVertex(graph, input2) == -1) printf("Dest. vertex does not exist in graph.\n");
+                else addEdge(graph, srcIdx, input2, weight);
                 break;
             case 3:
                 scanf(" %256s", input1);
