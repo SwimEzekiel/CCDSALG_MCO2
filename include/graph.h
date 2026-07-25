@@ -28,5 +28,9 @@ void addVertex(Graph*, string);
 int findVertex(Graph*, string);
 int addEdge(Graph*, int idx, string, int weight);
  
-// Prototypes from getdegree.c
+// Prototypes from getdegree
+Vertex* getVertexByName(Graph*, string);
 int getDegree(Graph*, string);
+
+// Prototype from checkedge
+int checkEdge(Graph*, string, string);
