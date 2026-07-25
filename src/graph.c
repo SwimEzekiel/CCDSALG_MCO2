@@ -47,7 +47,8 @@ void addVertex(Graph* g, string vName){
 }
 
 int addEdge(Graph *g, string src, string dst, int weight){
-	if (weight < 0) return 1; // error 1: weight cannot be negative
+	if (weight < 0) return 1; 
+	else if (weight > 100) return 1; // error 1: weight must be in bounds
 
 	int srcIdx = -1;
 	int ctr = 0;
