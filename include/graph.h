@@ -27,3 +27,6 @@ void destroyGraph(Graph*);
 void addVertex(Graph*, string);
 int findVertex(Graph*, string);
 int addEdge(Graph*, int idx, string, int weight);
+ 
+// Prototypes from getdegree.c
+int getDegree(Graph*, string);
