@@ -50,16 +50,13 @@ void addVertex(Graph* g, string vName){
 			}
 		}
 		
-		if (diff == 0) printf("Vertex already exists.\n");
+		if (diff == 0);
 		else if (prev == NULL) { // New must be first vert: works!
-			printf("Must be first vert!\n");
 			new->nextVert = g->adjList;
 			g->adjList = new;
 		} else if (cur == NULL) { // New must be last vert
-			printf("Must be last vert!\n");
 			prev->nextVert = new;
 		} else { // Somewhere in between
-			printf("Somewhere in between!\n");
 			prev->nextVert = new;
 			new->nextVert = cur;
 		}
@@ -87,7 +84,9 @@ int findVertex(Graph *g, string vert){
 int addEdge(Graph *g, int srcIdx, string dst, int weight){
 	Pair *new = malloc(sizeof(Pair));
 	Vertex *targetVert = g->adjList;
-	Pair *prev = NULL;
+	Pair *cur = NULL, *prev = NULL;
+	int diff;
+
 	strcpy(new->name, dst);
 	new->weight = weight;
 	new->next = NULL;
@@ -98,11 +97,27 @@ int addEdge(Graph *g, int srcIdx, string dst, int weight){
 	if (targetVert->adj == NULL){
 		targetVert->adj = new;
 	} else {
-		prev = targetVert->adj;
-		while (prev->next != NULL){
-			prev = prev->next;
+		cur = targetVert->adj;
+		diff = strcmp(dst, cur->name);
+		while (diff > 0 && cur != NULL){
+			diff = strcmp(dst, cur->name);
+
+			if (diff > 0){
+				prev = cur;
+				cur = cur->next;
+			}
 		}
-		prev->next = new;
+
+		if (diff == 0);
+		else if (prev == NULL){
+			new->next = targetVert->adj;
+			targetVert->adj = new;
+		} else if (cur == NULL){
+			prev->next = new;
+		} else {
+			prev->next = new;
+			new->next = cur;
+		}
 	}
 
 	return 0; // 0 means successful
