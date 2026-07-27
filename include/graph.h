@@ -27,6 +27,10 @@ void destroyGraph(Graph*);
 void addVertex(Graph*, string);
 int findVertex(Graph*, string);
 int addEdge(Graph*, int idx, string, int weight);
+void printVertices(Graph*);
+void printEdges(Graph*);
+void printGraph(Graph*);
+void MST(Graph*);
  
 // Prototypes from getdegree
 Vertex* getVertexByName(Graph*, string);

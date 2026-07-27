@@ -7,39 +7,6 @@
 #include "../include/stack.h"
 #include "../include/graph.h"
 
-void printVertices(Graph *g){
-    Vertex *cur = g->adjList;
-    while (cur != NULL){
-        printf(cur->name);
-        if (cur->nextVert != NULL) printf(", ");
-        cur = cur->nextVert;
-    }
-    printf("}\n");
-}
-void printEdges(Graph *g){
-    Vertex *curV = g->adjList;
-    Pair   *curP = NULL;
-
-    if (curV != NULL && curV->adj != NULL) curP = curV->adj;
-
-    while (curV != NULL){
-        if(curV == g->adjList && curV->adj != NULL) printf("\n"); // Runs only on first edge!
-        curP = curV->adj;
-        while (curP != NULL){
-            printf("     (%s, %s, %d),\n", curV->name, curP->name, curP->weight);
-            curP = curP->next;
-        }
-        curV = curV->nextVert;
-    }
-    printf("}\n");
-}
-void printGraph(Graph *g){
-    printf("G = (V,E)\n");
-    printf("V = {");
-    printVertices(g);
-    printf("E = {");
-    printEdges(g);
-}
 void flush(){
     char c;
     while ((c = getchar()) != '\n' && c != EOF); // Flush input buffer :>
@@ -94,7 +61,7 @@ int main(){
                 printf("shortestPath(%s, %s)", input1, input2);
                 break;
             case 10: printGraph(graph); break;
-            case 11: break;
+            case 11: destroyGraph(graph); break;
             default: 
                 printf("Invalid command entered.\n"); 
                 flush();
