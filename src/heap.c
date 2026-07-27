@@ -23,7 +23,7 @@ void swap(int *a, int *b){
 //heapifies node at a given index
 void heapify(Heap *heap, int i){
     int largest = i;
-    int left = 2 * i + 2;
+    int left = 2 * i + 1;
     int right = 2 * i + 2;
 
     if (left < heap->size && heap->arr[left] > heap->arr[largest])
@@ -47,6 +47,7 @@ void buildHeap(Heap *heap){
 }
 
 //increas value at given index i
+// assumes that it is used only to increase key
 void increaseKey(Heap *heap, int i, int newValue){
     heap->arr[i] = newValue;
     while (i != 0 && heap->arr[(i - 1) / 2] < heap->arr[i]){
@@ -57,13 +58,14 @@ void increaseKey(Heap *heap, int i, int newValue){
 
 //inserts a value at the heap
 void insertHeap(Heap *heap, int value){
-    if(!(heap->size == heap->limit)){
+    if(heap->size != heap->limit){
         heap->size++;
         int i = heap->size - 1;
         heap->arr[i] = value;
 
         while(i != 0 && heap->arr[(i - 1) / 2] < heap->arr[i]){
             swap(&heap->arr[i], &heap->arr[(i - 1)/2]);
+            i = (i - 1) / 2;
         }
     }
 }
@@ -90,6 +92,12 @@ void deleteKey(Heap *heap, int i){
     } else {
         heap->arr[i] = heap->arr[heap->size-1];
         heap->size--;
-        heapify(heap, i);
+        if(i != 0 && heap->arr[(i - 1) / 2] < heap->arr[i]){
+            while(i != 0 && heap->arr[(i - 1) / 2] < heap->arr[i]){
+                swap(&heap->arr[i], &heap->arr[(i - 1) / 2]);
+                i = (i - 1) / 2;
+            }
+        } else
+            heapify(heap, i);
     }
 }

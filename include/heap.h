@@ -1,19 +1,23 @@
 #include "graph.h"
 
-typedef struct EdgeTag Edge;
-typedef struct {
+typedef struct Edge {
     Vertex *src;
     Vertex *dst;
     int weight;
-    Edge *next;
+    struct Edge *next;
 } Edge;
 
 typedef struct Heap{
     int *arr;
-    char type; // kung int or char, HeapArray is a struct na nasa header.h
     int size;
     int limit;
 } Heap;
+
+typedef struct HeapEdge{
+    Edge *arr;
+    int size;
+    int limit;
+} HeapEdge;
 
 //function prototypes from heap.c
 Heap *createHeap(int limit);
