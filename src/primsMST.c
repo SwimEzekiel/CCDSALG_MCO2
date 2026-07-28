@@ -1,13 +1,39 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "heapedge.c"
 #include "../include/graph.h"
+
+Edge* pairToEdge(Pair *p, Vertex *v){
+    Edge *new = malloc(sizeof(Edge));
+    new->src = v->name;
+    new->dst = p->name;
+    new->weight = p->weight;
+    new->next = p->next;
+
+    return new;
+}
 
 void MST(Graph *g){
     Graph *tree = createGraph();
-    Vertex *cur;
-    // New pair min heap
+    Vertex *curV = g->adjList;
+    Edge *curE = pairToEdge(curV->adj, curV);
+    HeapEdge *heap = createHeapEdge(g->vertNum-1);
+    int edgeNum = 0, find;
+
     
+    do {
+        curE = pairToEdge(curV->adj, curV);
+
+        while (curE != NULL){
+            if (findVertex(tree, curE->dst) == -1){
+                find = findHeapEdge(heap, *curE);
+                if (find > 0 && heap->arr[find].weight > curE->weight) increaseKey();
+                else insertHeapEdge(heap, *curE);
+            }
+        }
+    } while (edgeNum != tree->vertNum - 1 && curV != NULL);
+
     /* PSEUDOCODE FOR PRIMS
     Do while graph does not have |V|-1 elements
         Insert neighbor vertices to graph: addVertex()

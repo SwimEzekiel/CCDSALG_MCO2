@@ -12,6 +12,18 @@ HeapEdge *createHeapEdge(int limit){
     return heap;
 }
 
+int findHeapEdge(HeapEdge *heap, Edge e){
+    Edge *cur = heap->arr;
+    for (int i = 0; i < heap->size; i++){
+        if (cur->weight == e.weight &&
+            !strcmp(cur->src, e.src) &&
+            !strcmp(cur->dst, e.dst)) return i;
+        else cur = cur->next;
+    }
+
+    return -1;
+}
+
 void swapEdge(Edge *a, Edge *b){
     Edge temp = *a;
     *a = *b;
@@ -83,5 +95,14 @@ void deleteKeyEdge(HeapEdge *heap, int i){
             }
         } else
             heapifyMinEdge(heap, i);
+    }
+}
+
+void editEdge(HeapEdge *heap, int i, int newValue, string newSrc){
+    heap->arr[i].weight = newValue;
+    strcpy(heap->arr[i].src, newSrc);
+    while (i != 0 && heap->arr[(i - 1) / 2] < heap->arr[i]){
+        swap(&heap->arr[i], &heap->arr[(i-1)/2]);
+        i = (i - 1)/2;
     }
 }
