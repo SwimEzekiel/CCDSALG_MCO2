@@ -5,7 +5,6 @@
 #include "../include/heap.h"
 #include "../include/queue.h"
 #include "../include/stack.h"
-#include "../include/graph.h"
 
 void flush(){
     char c;
@@ -54,7 +53,7 @@ int main(){
                 printf("checkPath(%s, %s)\n", input1, input2);
                 break;
             case 8:
-                printf("MST()\n");
+                MST(graph);
                 break;
             case 9: // OPTIONAL ONLY!!
                 scanf(" %256s %256s", input1, input2);

@@ -13,11 +13,6 @@ typedef struct Heap{
     int limit;
 } Heap;
 
-typedef struct HeapEdge{
-    Edge *arr;
-    int size;
-    int limit;
-} HeapEdge;
 
 //function prototypes from heap.c
 Heap *createHeap(int limit);

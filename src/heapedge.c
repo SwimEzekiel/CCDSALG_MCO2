@@ -2,6 +2,7 @@
 #include <string.h>
 #include "../include/header.h"
 #include "../include/heap.h"
+#include "../include/heapedge.h"
 
 HeapEdge *createHeapEdge(int limit){
     HeapEdge *heap = (HeapEdge *)malloc(sizeof(HeapEdge));
@@ -15,8 +16,8 @@ HeapEdge *createHeapEdge(int limit){
 int findHeapEdge(HeapEdge *heap, Edge e){
     for (int i = 0; i < heap->size; i++){
         if (heap->arr[i].weight == e.weight &&
-            !strcmp(heap->arr[i].src, e.src) &&
-            !strcmp(heap->arr[i].dst, e.dst)) return i;
+            !strcmp(heap->arr[i].src->name, e.src->name) &&
+            !strcmp(heap->arr[i].dst->name, e.dst->name)) return i;
     }
     return -1;
 }
@@ -104,9 +105,16 @@ void deleteKeyEdge(HeapEdge *heap, int i){
 
 void editEdge(HeapEdge *heap, int i, int newValue, string newSrc){
     heap->arr[i].weight = newValue;
-    strcpy(heap->arr[i].src, newSrc);
+    strcpy(heap->arr[i].src->name, newSrc);
     while (i != 0 && heap->arr[(i - 1) / 2].weight > heap->arr[i].weight){
         swapEdge(&heap->arr[i], &heap->arr[(i-1)/2]);
         i = (i - 1)/2;
     }
+}
+
+int searchDest(HeapEdge *h, string dst){
+    for (int i = 0; i < h->size; i++){
+        if (!strcmp(h->arr[i].dst->name, dst)) return i;
+    }
+    return -1;
 }
