@@ -1,3 +1,6 @@
+#ifndef heap_h
+#define heap_h
+
 #include "graph.h"
 
 typedef struct Edge {
@@ -24,3 +27,5 @@ void insertHeap(Heap *heap, int value);
 int getRoot(Heap *heap);
 void deleteKey(Heap *heap, int index);
 void printHeap(Heap *heap);
+
+#endif

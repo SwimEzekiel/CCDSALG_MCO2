@@ -1,3 +1,5 @@
+#ifndef graph_h
+#define graph_h
 #include "header.h"
 
 typedef struct Vertex Vertex;
@@ -38,3 +40,5 @@ int getDegree(Graph*, string);
 
 // Prototype from checkedge
 int checkEdge(Graph*, string, string);
+
+#endif

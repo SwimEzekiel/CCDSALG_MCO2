@@ -1,3 +1,7 @@
+#ifndef stack_h
+#define stack_h
+
+
 typedef struct { //Stack itself.
     int *collection;
     int limit;
@@ -14,3 +18,5 @@ int push(Stack *stack, int item);
 int isStackFull(Stack *stack);
 int isStackEmpty(Stack *stack);
 int peekStack(Stack *stack);
+
+#endif

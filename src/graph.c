@@ -50,16 +50,13 @@ void addVertex(Graph* g, string vName){
 			}
 		}
 		
-		if (diff == 0) printf("Vertex already exists.\n");
+		if (diff == 0);
 		else if (prev == NULL) { // New must be first vert: works!
-			printf("Must be first vert!\n");
 			new->nextVert = g->adjList;
 			g->adjList = new;
 		} else if (cur == NULL) { // New must be last vert
-			printf("Must be last vert!\n");
 			prev->nextVert = new;
 		} else { // Somewhere in between
-			printf("Somewhere in between!\n");
 			prev->nextVert = new;
 			new->nextVert = cur;
 		}

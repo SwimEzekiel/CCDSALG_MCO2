@@ -19,11 +19,12 @@ void MST(Graph *g){
     Graph *tree = createGraph();
     Vertex *curV = g->adjList;
     Pair *curP;
-    Edge *curE;
+    Edge *curE, *root = malloc(sizeof(Edge));
     HeapEdge *heap = createHeapEdge(g->vertNum-1);
     int edgeNum = 0, find;
     string visit;
 
+    printf("0");
     do
     {
         // Base case(?)
@@ -31,23 +32,28 @@ void MST(Graph *g){
         else curP = NULL;
 
         // Add neighbors phase
+        printf("4");
         while (curP != NULL){
             curE = pairToEdge(curP, curV);
-            if (findVertex(g, curE->dst->name) > -1) continue; 
+            if (findVertex(g, curE->dst->name) > -1); 
             else if ((find = searchDest(heap, curE->dst->name)) > -1) editEdge(heap, find, curE->weight, curE->src->name);
             else insertHeapEdge(heap, *curE);
 
             curP = curP->next;
+            printf("1");
         }
+        printf("5");
 
         // Visit next unvisited node with least weight
-        *curE = getRootHeapEdge(heap);
+        *root = getRootHeapEdge(heap);
         curV = getVertexByName(g, curE->dst->name);
         insertHeapEdge(heap, *curE);
         addVertex(tree, curV->name);
         addEdge(tree, tree->vertNum, curV->name, curE->weight);
         deleteKeyEdge(heap, 0);
+        printf("2");
     } while (heap->size != 0);
+    printf("3");
     
     
     printGraph(tree);
