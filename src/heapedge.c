@@ -13,14 +13,11 @@ HeapEdge *createHeapEdge(int limit){
 }
 
 int findHeapEdge(HeapEdge *heap, Edge e){
-    Edge *cur = heap->arr;
     for (int i = 0; i < heap->size; i++){
-        if (cur->weight == e.weight &&
-            !strcmp(cur->src, e.src) &&
-            !strcmp(cur->dst, e.dst)) return i;
-        else cur = cur->next;
+        if (heap->arr[i].weight == e.weight &&
+            !strcmp(heap->arr[i].src, e.src) &&
+            !strcmp(heap->arr[i].dst, e.dst)) return i;
     }
-
     return -1;
 }
 
@@ -28,6 +25,13 @@ void swapEdge(Edge *a, Edge *b){
     Edge temp = *a;
     *a = *b;
     *b = temp;
+}
+
+void continuousSwapEdge(HeapEdge *heap, int i){
+    while(i != 0 && heap->arr[(i - 1) / 2].weight > heap->arr[i].weight){
+        swapEdge(&heap->arr[i], &heap->arr[(i - 1)/2]);
+        i = (i - 1) / 2;
+    }
 }
 
 //assumes na weights can't be the same, will implement na if same, compares destination
@@ -101,8 +105,8 @@ void deleteKeyEdge(HeapEdge *heap, int i){
 void editEdge(HeapEdge *heap, int i, int newValue, string newSrc){
     heap->arr[i].weight = newValue;
     strcpy(heap->arr[i].src, newSrc);
-    while (i != 0 && heap->arr[(i - 1) / 2] < heap->arr[i]){
-        swap(&heap->arr[i], &heap->arr[(i-1)/2]);
+    while (i != 0 && heap->arr[(i - 1) / 2].weight > heap->arr[i].weight){
+        swapEdge(&heap->arr[i], &heap->arr[(i-1)/2]);
         i = (i - 1)/2;
     }
 }
