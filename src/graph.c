@@ -12,7 +12,8 @@ Graph* createGraph(){
 
 void destroyGraph(Graph *g){
 	Vertex *curV = g->adjList, *temV;
-	Pair *curP = g->adjList->adj, *temP;
+	Pair *curP, *temP;
+	if (curV != NULL) curP = g->adjList->adj;
 
 	while (curV != NULL){
 		while (curP != NULL){
@@ -83,14 +84,20 @@ int findVertex(Graph *g, string vert){
 
 int addEdge(Graph *g, int srcIdx, string dst, int weight){
 	Pair *new = malloc(sizeof(Pair));
-	Vertex *targetVert = g->adjList;
-	Pair *prev = NULL;
 	strcpy(new->name, dst);
 	new->weight = weight;
 	new->next = NULL;
 
+	Pair *rev = malloc(sizeof(Pair));
+	rev->weight = weight;
+	rev->next = NULL;
+
+	Vertex *targetVert = g->adjList;
+	Pair *prev = NULL;
+	
 	for (int ctr = 0; ctr < srcIdx; ctr++)
 		targetVert = targetVert->nextVert;
+	strcpy(rev->name, targetVert->name);
 	
 	if (targetVert->adj == NULL){
 		targetVert->adj = new;
@@ -100,6 +107,20 @@ int addEdge(Graph *g, int srcIdx, string dst, int weight){
 			prev = prev->next;
 		}
 		prev->next = new;
+	}
+
+	targetVert = g->adjList;
+	while (strcmp(targetVert->name, dst))
+		targetVert = targetVert->nextVert;
+	
+	if (targetVert->adj == NULL){
+		targetVert->adj = rev;
+	} else {
+		prev = targetVert->adj;
+		while (prev->next != NULL){
+			prev = prev->next;
+		}
+		prev->next = rev;
 	}
 
 	return 0; // 0 means successful

@@ -18,13 +18,14 @@ Edge* pairToEdge(Pair *p, Vertex *v){
 void MST(Graph *g){
     Graph *tree = createGraph();
     Vertex *curV = g->adjList;
+    addVertex(tree, curV->name);
     Pair *curP;
     Edge *curE, *root = malloc(sizeof(Edge));
     HeapEdge *heap = createHeapEdge(g->vertNum-1);
     int edgeNum = 0, find;
     string visit;
+    int debug = 0;
 
-    printf("0");
     do
     {
         // Base case(?)
@@ -32,28 +33,30 @@ void MST(Graph *g){
         else curP = NULL;
 
         // Add neighbors phase
-        printf("4");
         while (curP != NULL){
             curE = pairToEdge(curP, curV);
-            if (findVertex(g, curE->dst->name) > -1); 
+            if (findVertex(tree, curE->dst->name) > -1) continue; 
             else if ((find = searchDest(heap, curE->dst->name)) > -1) editEdge(heap, find, curE->weight, curE->src->name);
             else insertHeapEdge(heap, *curE);
 
             curP = curP->next;
-            printf("1");
         }
-        printf("5");
 
         // Visit next unvisited node with least weight
-        *root = getRootHeapEdge(heap);
+        root = getRootHeapEdge(heap);
+        printf("1");
         curV = getVertexByName(g, curE->dst->name);
-        insertHeapEdge(heap, *curE);
-        addVertex(tree, curV->name);
-        addEdge(tree, tree->vertNum, curV->name, curE->weight);
-        deleteKeyEdge(heap, 0);
         printf("2");
+        insertHeapEdge(heap, *curE);
+        printf("3");
+        addVertex(tree, curV->name);
+        printf("4\n");
+        addEdge(tree, findVertex(tree, curE->src->name), curV->name, curE->weight);
+        printGraph(tree);
+        deleteKeyEdge(heap, 0);
+        printf("6");
+        debug++;
     } while (heap->size != 0);
-    printf("3");
     
     
     printGraph(tree);

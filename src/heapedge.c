@@ -73,13 +73,13 @@ void insertHeapEdge(HeapEdge *heap, Edge value){
     }
 }
 
-Edge getRootHeapEdge(HeapEdge *heap){
-    Edge value;
+Edge* getRootHeapEdge(HeapEdge *heap){
+    Edge* value;
     if (heap-> size == 1){
         heap->size--;
-        value = heap->arr[0];
+        value = &heap->arr[0];
     } else {
-        value = heap->arr[0];
+        value = &heap->arr[0];
         heap->arr[0] = heap->arr[heap->size - 1];
         heap->size--;
         heapifyMinEdge(heap, 0);
