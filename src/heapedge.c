@@ -29,9 +29,16 @@ void swapEdge(Edge *a, Edge *b){
 }
 
 void continuousSwapEdge(HeapEdge *heap, int i){
-    while(i != 0 && heap->arr[(i - 1) / 2].weight > heap->arr[i].weight){
-        swapEdge(&heap->arr[i], &heap->arr[(i - 1)/2]);
-        i = (i - 1) / 2;
+    while(i != 0 && heap->arr[(i - 1) / 2].weight >= heap->arr[i].weight){
+        if (heap->arr[(i - 1) / 2].weight == heap->arr[i].weight){
+            if (strcmp(heap->arr[(i - 1) / 2].dst->name, heap->arr[i].dst->name) > 0){
+                swapEdge(&heap->arr[i], &heap->arr[(i - 1)/2]);
+                i = (i - 1) / 2;
+            }
+        } else {
+            swapEdge(&heap->arr[i], &heap->arr[(i - 1)/2]);
+            i = (i - 1) / 2;
+        }
     }
 }
 
@@ -41,11 +48,25 @@ void heapifyMinEdge(HeapEdge *heap, int i){
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    if (left < heap->size && heap->arr[left].weight < heap->arr[smallest].weight)
-        smallest = left;
+    if (left < heap->size && heap->arr[left].weight <= heap->arr[smallest].weight){
+        if (heap->arr[left].weight == heap->arr[smallest].weight){
+            if (strcmp(heap->arr[left].dst->name, heap->arr[smallest].dst->name) < 0)
+                smallest = left;
+        }
+        else {
+            smallest = left;
+        }
+    }
 
-    if (right < heap->size && heap->arr[right].weight < heap->arr[smallest].weight)
-        smallest = right;
+    if (right < heap->size && heap->arr[right].weight <= heap->arr[smallest].weight){
+        if (heap->arr[right].weight == heap->arr[smallest].weight){
+            if (strcmp(heap->arr[right].dst->name, heap->arr[smallest].dst->name) < 0)
+                smallest = right;
+        }
+        else {
+            smallest = right;
+        }
+    }
 
     if (smallest != i){
         swapEdge(&heap->arr[i], &heap->arr[smallest]);
@@ -66,10 +87,14 @@ void insertHeapEdge(HeapEdge *heap, Edge value){
         int i = heap->size - 1;
         heap->arr[i] = value;
 
+        continuousSwapEdge(heap, i);
+        //replaced this vv with this ^^
+        /*
         while(i != 0 && heap->arr[(i - 1) / 2].weight > heap->arr[i].weight){
             swapEdge(&heap->arr[i], &heap->arr[(i - 1)/2]);
             i = (i - 1) / 2;
         }
+        */
     }
 }
 
@@ -94,10 +119,7 @@ void deleteKeyEdge(HeapEdge *heap, int i){
         heap->arr[i] = heap->arr[heap->size-1];
         heap->size--;
         if(i != 0 && heap->arr[(i - 1) / 2].weight > heap->arr[i].weight){
-            while(i != 0 && heap->arr[(i - 1) / 2].weight > heap->arr[i].weight){
-                swapEdge(&heap->arr[i], &heap->arr[(i - 1) / 2]);
-                i = (i - 1) / 2;
-            }
+            continuousSwapEdge(heap, i);
         } else
             heapifyMinEdge(heap, i);
     }
@@ -106,10 +128,7 @@ void deleteKeyEdge(HeapEdge *heap, int i){
 void editEdge(HeapEdge *heap, int i, int newValue, string newSrc){
     heap->arr[i].weight = newValue;
     strcpy(heap->arr[i].src->name, newSrc);
-    while (i != 0 && heap->arr[(i - 1) / 2].weight > heap->arr[i].weight){
-        swapEdge(&heap->arr[i], &heap->arr[(i-1)/2]);
-        i = (i - 1)/2;
-    }
+    continuousSwapEdge(heap, i);
 }
 
 int searchDest(HeapEdge *h, string dst){
