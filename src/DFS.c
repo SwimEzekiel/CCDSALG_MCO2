@@ -2,26 +2,25 @@
 #include <string.h>
 #include <stdlib.h>
 #include "../include/graph.h"
-#include "../include/queue.h"
- 
+#include "../include/stack.h"
+
 /*
-    Performs a Breadth first traversal of the graph starting from the
+    Performs a depth-first traversal of the graph starting from the
     given vertex, printing each visited vertex's name on its own line.
- 
-    Since edges are stored one-directionally (addedge func), the graph is traversed as an undirected
-    graph by gathering both outgoing and incoming neighbors.
-    The queue itself only stores ints, so vertices are tracked by
-    their index in the graph's vertex list rather than by name directly.
-    When there's a choice between multiple unvisited neighbors, they are visited in lexicographical order.
- 
+
+    Uses the same strategy as BFS, just with a stack instead of a queue.
+    Neighbors are gathered from both directions, sorted lexicographically, 
+    then pushed in descending order so that when popped, 
+    the lexicographically smallest unvisited neighbor comes out first, matching the tie-breaking rule.
+
     @param *g - pointer to the graph
     @param start - name of the vertex to start the traversal from
 */
-void BFS(Graph *g, string start){
+void DFS(Graph *g, string start){
     int n = g->vertNum; // get total number of vertices in graph
     if (n == 0)         // check if graph empty
         return;
- 
+
     // build an array of vertices
     // lexicographically sorted linked list
     Vertex **verts = malloc(n * sizeof(Vertex*));
@@ -30,33 +29,33 @@ void BFS(Graph *g, string start){
         verts[i] = cur;
         cur = cur->nextVert;
     }
- 
+
     int startIdx = findVertex(g, start); // find index of starting vertex
     if (startIdx == -1){
         free(verts);
         return;
     }
- 
+
     int *visited = calloc(n, sizeof(int)); // create visited array (initialized to 0 cus 0 is unvisited)
-    Queue *q = createQueue();
- 
-    enqueue(q, startIdx);
+    Stack *s = createStack(n);
+
+    push(s, startIdx);
     visited[startIdx] = 1;
- 
-    while (!isQueueEmpty(q)){ // start of BFS loop
-        int curIdx = dequeue(q);
+
+    while (!isStackEmpty(s)){ // start of DFS loop
+        int curIdx = pop(s, 0);
         printf("%s\n", verts[curIdx]->name);
- 
-        // create and gather all neighbors of curIdx in both directions
+
+        // gather all neighbors of curIdx, in both directions
         int *neighbors = malloc(n * sizeof(int));
         int nCount = 0;
- 
+
         Pair *p = verts[curIdx]->adj;
         while (p != NULL){
             neighbors[nCount++] = findVertex(g, p->name);
             p = p->next;
         }
- 
+
         for (int i = 0; i < n; i++){ // scans every other vertex's adj list for inc edges
             if (i == curIdx) continue;
             Pair *op = verts[i]->adj;
@@ -68,7 +67,7 @@ void BFS(Graph *g, string start){
                 op = op->next;
             }
         }
- 
+
         // sort the gathered neighbors lexicographically by name using insertion sort
         for (int i = 1; i < nCount; i++){
             int key = neighbors[i];
@@ -79,20 +78,22 @@ void BFS(Graph *g, string start){
             }
             neighbors[j + 1] = key;
         }
- 
-        // visit unvisited neighbors in sorted order
-        for (int i = 0; i < nCount; i++){
+
+        /* push unvisited neighbors in descending lexicographic order, so the
+           smallest ends up on top of the stack (meaning itll be popped first)
+        */
+        for (int i = nCount - 1; i >= 0; i--){
             int nIdx = neighbors[i];
-            if (!visited[nIdx]){    
+            if (!visited[nIdx]){    // marks current visited to avoid duplication
                 visited[nIdx] = 1;
-                enqueue(q, nIdx);
+                push(s, nIdx);
             }
         }
- 
+
         free(neighbors);
     }
- 
+
     free(verts);
     free(visited);
-    destroyQueue(q);
+    destroyStack(s);
 }

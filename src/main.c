@@ -54,11 +54,11 @@ int main(){
                 break;
             case 6:
                 scanf(" %256s", input1);
-                printf("DFS(%s)\n", input1);
+                DFS(graph, input1);
                 break;
             case 7:
                 scanf(" %256s %256s", input1, input2);
-                printf("checkPath(%s, %s)\n", input1, input2);
+                printf("%d\n", checkPath(graph, input1, input2));
                 break;
             case 8:
                 MST(graph);
