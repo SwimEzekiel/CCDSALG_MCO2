@@ -1,9 +1,23 @@
+#ifndef heap_h
+#define heap_h
+
+#include "graph.h"
+
+typedef struct Vertex Vertex;
+
+struct Edge {
+    Vertex *src;
+    Vertex *dst;
+    int weight;
+    struct Edge *next;
+};
+
 typedef struct Heap{
     int *arr;
-    char type; // kung int or char, HeapArray is a struct na nasa header.h
     int size;
     int limit;
 } Heap;
+
 
 //function prototypes from heap.c
 Heap *createHeap(int limit);
@@ -15,3 +29,5 @@ void insertHeap(Heap *heap, int value);
 int getRoot(Heap *heap);
 void deleteKey(Heap *heap, int index);
 void printHeap(Heap *heap);
+
+#endif

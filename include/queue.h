@@ -1,3 +1,6 @@
+#ifndef queue_h
+#define queue_h
+
 typedef struct Node {
     int value; //Keeps an int value
     struct Node *next;  //Pointer to the next node
@@ -19,3 +22,5 @@ int size(Queue *queue);
 int isQueueEmpty(Queue *queue);
 int peekQueue(Queue *queue, int *status);
 void destroyQueue(Queue *queue);
+
+#endif
