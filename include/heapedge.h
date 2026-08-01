@@ -2,12 +2,14 @@
 #define heapedge_h
 #include "heap.h"
 
+//variation of heap that stores heap values
 typedef struct HeapEdge{
     Edge *arr;
     int size;
     int limit;
 } HeapEdge;
 
+//function prototypes from heapedge.c
 HeapEdge* createHeapEdge(int i);
 int findHeapEdge(HeapEdge*, Edge);
 void swapEdge(Edge*, Edge*);

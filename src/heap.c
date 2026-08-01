@@ -1,9 +1,14 @@
 #include <stdlib.h>
 #include <string.h>
-#include "../include/header.h"
 #include "../include/heap.h"
 
-//allocates the memory needed for the heap and returns it
+/*
+ * Creates a heap by allocating the memory needed for it
+ *
+ * @param limit - dictates size limit of the heap
+ *
+ * returns the pointer to the heap
+ */
 Heap *createHeap(int limit){
     Heap *heap = (Heap *)malloc(sizeof(Heap));
     heap->size = 0;
@@ -13,14 +18,23 @@ Heap *createHeap(int limit){
     return heap;
 }
 
-//swaps values of the given parameters
+/*
+ * Swaps values in the heap
+ *
+ * @param *a - pointer to the value to switch to param b's postion
+ * @param *b - pointer to the value to switch to param a's position
+ */
 void swap(int *a, int *b){
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-//heapifies node at a given index
+/*
+ * Heapifies a heap at a given index, following the rules of a max heap
+ *
+ * @param *heap - pointer to a heap
+ */
 void heapify(Heap *heap, int i){
     int largest = i;
     int left = 2 * i + 1;
@@ -38,7 +52,11 @@ void heapify(Heap *heap, int i){
     }
 }
 
-//creates a max heap given an already exisiting heap/array
+/*
+ * Converts the heap to a max heap given it already has values
+ *
+ * @param *heap - pointer to a heap
+ */
 void buildHeap(Heap *heap){
     int size = heap->size;
     for (int i = (size - 1) / 2; i >= 0; i--){
@@ -46,17 +64,12 @@ void buildHeap(Heap *heap){
     }
 }
 
-//increas value at given index i
-// assumes that it is used only to increase key
-void increaseKey(Heap *heap, int i, int newValue){
-    heap->arr[i] = newValue;
-    while (i != 0 && heap->arr[(i - 1) / 2] < heap->arr[i]){
-        swap(&heap->arr[i], &heap->arr[(i-1)/2]);
-        i = (i - 1)/2;
-    }
-}
-
-//inserts a value at the heap
+/*
+ * Inserts a value at the heap
+ *
+ * @param *heap - pointer to the heap
+ * @param value - value to be inserted
+ */
 void insertHeap(Heap *heap, int value){
     if(heap->size != heap->limit){
         heap->size++;
@@ -70,7 +83,11 @@ void insertHeap(Heap *heap, int value){
     }
 }
 
-//gets max value of the heap
+/*
+ * Gets the max value of the heap, then deletes it
+ *
+ * @param *heap - pointer to the heap
+ */
 int getRoot(Heap *heap){
     int value = 0;
     if (heap-> size == 1){
@@ -85,7 +102,12 @@ int getRoot(Heap *heap){
     return value;
 }
 
-//deletes an element at given index
+/*
+ * Deletes a value given an index i
+ *
+ * @param *heap - pointer to the heap
+ * @param i - index to delete
+ */
 void deleteKey(Heap *heap, int i){
     if(i == heap->size-1){
         heap->size--;
