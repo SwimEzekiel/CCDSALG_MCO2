@@ -3,12 +3,14 @@
 
 #include "graph.h"
 
-typedef struct Edge {
+typedef struct Vertex Vertex;
+
+struct Edge {
     Vertex *src;
     Vertex *dst;
     int weight;
     struct Edge *next;
-} Edge;
+};
 
 typedef struct Heap{
     int *arr;

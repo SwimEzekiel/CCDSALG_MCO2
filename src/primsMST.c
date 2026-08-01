@@ -16,12 +16,17 @@ Edge* pairToEdge(Pair *p, Vertex *v){
 }
 
 void MST(Graph *g){
-    Graph *tree = createGraph();
+    /*Graph *tree = createGraph();
     Vertex *curV = g->adjList;
     addVertex(tree, curV->name);
+
     Pair *curP;
     Edge *curE, *root = malloc(sizeof(Edge));
+
     HeapEdge *heap = createHeapEdge(g->vertNum-1);
+    EdgeLL* edgePrintList = malloc(sizeof(EdgeLL));
+    edgePrintList->edges = NULL;
+
     int edgeNum = 0, find;
     string visit;
     int debug = 0;
@@ -52,7 +57,7 @@ void MST(Graph *g){
         addVertex(tree, curV->name);
         printf("4\n");
         addEdge(tree, findVertex(tree, curE->src->name), curV->name, curE->weight);
-        printGraph(tree);
+        printGraph(tree, edgePrintList);
         deleteKeyEdge(heap, 0);
         printf("6");
         debug++;
@@ -61,4 +66,5 @@ void MST(Graph *g){
     
     printGraph(tree);
     destroyGraph(tree);
+    */
 }

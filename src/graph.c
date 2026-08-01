@@ -82,22 +82,25 @@ int findVertex(Graph *g, string vert){
 	return idx;
 }
 
+Vertex* getVertex(Graph *g, int idx){
+	Vertex *ret = g->adjList;
+	for (int i = 0; i < idx; i++){
+		ret = ret->nextVert;
+	}
+	return ret;
+}
+
 int addEdge(Graph *g, int srcIdx, string dst, int weight){
 	Pair *new = malloc(sizeof(Pair));
 	strcpy(new->name, dst);
 	new->weight = weight;
 	new->next = NULL;
 
-	Pair *rev = malloc(sizeof(Pair));
-	rev->weight = weight;
-	rev->next = NULL;
-
 	Vertex *targetVert = g->adjList;
 	Pair *prev = NULL;
 	
 	for (int ctr = 0; ctr < srcIdx; ctr++)
 		targetVert = targetVert->nextVert;
-	strcpy(rev->name, targetVert->name);
 	
 	if (targetVert->adj == NULL){
 		targetVert->adj = new;
@@ -107,20 +110,6 @@ int addEdge(Graph *g, int srcIdx, string dst, int weight){
 			prev = prev->next;
 		}
 		prev->next = new;
-	}
-
-	targetVert = g->adjList;
-	while (strcmp(targetVert->name, dst))
-		targetVert = targetVert->nextVert;
-	
-	if (targetVert->adj == NULL){
-		targetVert->adj = rev;
-	} else {
-		prev = targetVert->adj;
-		while (prev->next != NULL){
-			prev = prev->next;
-		}
-		prev->next = rev;
 	}
 
 	return 0; // 0 means successful
@@ -135,27 +124,60 @@ void printVertices(Graph *g){
     }
     printf("}\n");
 }
-void printEdges(Graph *g){
-    Vertex *curV = g->adjList;
-    Pair   *curP = NULL;
 
-    if (curV != NULL && curV->adj != NULL) curP = curV->adj;
+void insertToPrintList(EdgeLL *l, string srcName, string dstName, int weight){
+	Edge *cur = l->edges;
+	Edge *new = malloc(sizeof(Edge));
+	new->src = malloc(sizeof(Vertex));
+	new->dst = malloc(sizeof(Vertex));
+	strcpy(new->src->name, srcName);
+	strcpy(new->dst->name, dstName);
+	new->weight = weight;
+	new->next = NULL;
 
-    while (curV != NULL){
-        if(curV == g->adjList && curV->adj != NULL) printf("\n"); // Runs only on first edge!
-        curP = curV->adj;
-        while (curP != NULL){
-            printf("     (%s, %s, %d),\n", curV->name, curP->name, curP->weight);
-            curP = curP->next;
-        }
-        curV = curV->nextVert;
-    }
-    printf("}\n");
+
+	if (cur == NULL){
+		l->edges = new;
+	} else {
+		Edge *prev = NULL;
+		int diff = strcmp(srcName, cur->src->name);
+		while (diff > 0 && cur != NULL){
+			diff = strcmp(srcName, cur->src->name);
+
+			if (diff > 0) {
+				prev = cur;
+				cur = cur->next;
+			}
+		}
+		
+		if (diff == 0);
+		else if (prev == NULL) { // New must be first vert: works!
+			new->next = l->edges;
+			l->edges = new;
+		} else if (cur == NULL) { // New must be last vert
+			prev->next = new;
+		} else { // Somewhere in between
+			prev->next = new;
+			new->next = cur;
+		}
+	}
+	
+	l->edgeNum++;
 }
-void printGraph(Graph *g){
+void printEdges(EdgeLL* e){
+    Edge *cur = e->edges;
+
+	if (cur != NULL) printf("\n");
+	while (cur != NULL){
+		printf("     (%s, %s, %d),\n", cur->src->name, cur->dst->name, cur->weight);
+		cur = cur->next;
+	}
+	printf("}\n");
+}
+void printGraph(Graph *g, EdgeLL* e){
     printf("G = (V,E)\n");
     printf("V = {");
     printVertices(g);
     printf("E = {");
-    printEdges(g);
+    printEdges(e);
 }

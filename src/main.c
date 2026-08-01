@@ -2,7 +2,9 @@
 #include <string.h>
 #include <stdio.h>
 #include "../include/header.h"
+#include "../include/graph.h"
 #include "../include/heap.h"
+#include "../include/heapedge.h"
 #include "../include/queue.h"
 #include "../include/stack.h"
 
@@ -14,8 +16,10 @@ void flush(){
 
 int main(){
     Graph *graph = createGraph();
-    int command = 0, weight, srcIdx;
+    int command = 0, weight, srcIdx, dstIdx;
     string input1 = "", input2 = "";
+    EdgeLL *edgePrintList = malloc(sizeof(EdgeLL));
+    edgePrintList->edges = NULL;
 
     do {
         scanf(" %d", &command);
@@ -29,8 +33,12 @@ int main(){
                 scanf(" %256s %256s %d", input1, input2, &weight);
                 if (weight < 1 || weight > 100) printf("Weight must be from 1-100 only.\n");
                 else if ((srcIdx = findVertex(graph, input1)) == -1) printf("Source vertex does not exist in graph.\n");
-                else if (findVertex(graph, input2) == -1) printf("Dest. vertex does not exist in graph.\n");
-                else addEdge(graph, srcIdx, input2, weight);
+                else if ((dstIdx = findVertex(graph, input2)) == -1) printf("Dest. vertex does not exist in graph.\n");
+                else  {
+                    addEdge(graph, srcIdx, input2, weight); 
+                    insertToPrintList(edgePrintList, input1, input2, weight);
+                    addEdge(graph, dstIdx, input1, weight);
+                }
                 break;
             case 3:
                 scanf(" %256s", input1);
@@ -59,7 +67,7 @@ int main(){
                 scanf(" %256s %256s", input1, input2);
                 printf("shortestPath(%s, %s)", input1, input2);
                 break;
-            case 10: printGraph(graph); break;
+            case 10: printGraph(graph, edgePrintList); break;
             case 11: destroyGraph(graph); break;
             default: 
                 printf("Invalid command entered.\n"); 
