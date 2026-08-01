@@ -39,62 +39,85 @@ void addVertex(Graph* g, string vName){
 		g->adjList = new;
 	else {
 		Vertex *cur = g->adjList;
-		while (cur->nextVert != NULL)
-			cur = cur->nextVert;
-		cur->nextVert = new;
+		Vertex *prev = NULL;
+		int diff = strcmp(vName, cur->name);
+		while (diff > 0 && cur != NULL){
+			diff = strcmp(vName, cur->name);
+
+			if (diff > 0) {
+				prev = cur;
+				cur = cur->nextVert;
+			}
+		}
+		
+		if (diff == 0);
+		else if (prev == NULL) { // New must be first vert: works!
+			new->nextVert = g->adjList;
+			g->adjList = new;
+		} else if (cur == NULL) { // New must be last vert
+			prev->nextVert = new;
+		} else { // Somewhere in between
+			prev->nextVert = new;
+			new->nextVert = cur;
+		}
 	}
 	g->vertNum++;
 }
 
-int addEdge(Graph *g, string src, string dst, int weight){
-	if (weight < 0) return 1; 
-	else if (weight > 100) return 1; // error 1: weight must be in bounds
-
-	int srcIdx = -1;
+// Don't forget to use this for validation!
+int findVertex(Graph *g, string vert){
+	int idx = -1;
 	int ctr = 0;
+
 	Vertex *cur = g->adjList;
-	while (srcIdx == -1 && cur != NULL){
-		if (!strcmp(src, cur->name)) srcIdx = ctr;
+	while (idx == -1 && cur != NULL){
+		if (!strcmp(vert, cur->name)) idx = ctr;
 		else {
 			ctr++;
 			cur = cur->nextVert;
 		}
 	}
 
-	if (srcIdx == -1) return 2; // error 2: source vertex not in adjList
+	return idx;
+}
 
-	int dstIdx = -1;
-	ctr = 0;
-	cur = g->adjList;
-	while (dstIdx == -1 && cur != NULL){
-		if (!strcmp(dst, cur->name)) dstIdx = ctr;
-		else {
-			ctr++;
-			cur = cur->nextVert;
-		}
-	}
-
-	if (dstIdx == -1) return 3; // error 3: dest vertex not in adjList
-
-	/***********************************************************************/
+int addEdge(Graph *g, int srcIdx, string dst, int weight){
 	Pair *new = malloc(sizeof(Pair));
 	Vertex *targetVert = g->adjList;
-	Pair *prev = NULL;
+	Pair *cur = NULL, *prev = NULL;
+	int diff;
+
 	strcpy(new->name, dst);
 	new->weight = weight;
 	new->next = NULL;
 
-	for (ctr = 0; ctr < srcIdx; ctr++)
+	for (int ctr = 0; ctr < srcIdx; ctr++)
 		targetVert = targetVert->nextVert;
 	
 	if (targetVert->adj == NULL){
 		targetVert->adj = new;
 	} else {
-		prev = targetVert->adj;
-		while (prev->next != NULL){
-			prev = prev->next;
+		cur = targetVert->adj;
+		diff = strcmp(dst, cur->name);
+		while (diff > 0 && cur != NULL){
+			diff = strcmp(dst, cur->name);
+
+			if (diff > 0){
+				prev = cur;
+				cur = cur->next;
+			}
 		}
-		prev->next = new;
+
+		if (diff == 0);
+		else if (prev == NULL){
+			new->next = targetVert->adj;
+			targetVert->adj = new;
+		} else if (cur == NULL){
+			prev->next = new;
+		} else {
+			prev->next = new;
+			new->next = cur;
+		}
 	}
 
 	return 0; // 0 means successful
