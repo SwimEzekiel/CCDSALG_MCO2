@@ -133,6 +133,7 @@ void insertHeapEdge(HeapEdge *heap, Edge value){
     }
 }
 
+<<<<<<< HEAD
 /*
  * Gets the root edge then removes it
  *
@@ -142,11 +143,15 @@ void insertHeapEdge(HeapEdge *heap, Edge value){
  */
 Edge getRootHeapEdge(HeapEdge *heap){
     Edge value;
+=======
+Edge* getRootHeapEdge(HeapEdge *heap){
+    Edge* value;
+>>>>>>> b479612da5211520eb4e66e325680a3f7109c0bd
     if (heap-> size == 1){
         heap->size--;
-        value = heap->arr[0];
+        value = &heap->arr[0];
     } else {
-        value = heap->arr[0];
+        value = &heap->arr[0];
         heap->arr[0] = heap->arr[heap->size - 1];
         heap->size--;
         heapifyMinEdge(heap, 0);

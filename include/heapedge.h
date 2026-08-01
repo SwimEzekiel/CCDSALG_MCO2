@@ -17,7 +17,7 @@ void continuousSwapEdge(HeapEdge*, int i);
 void heapifyMinEdge(HeapEdge*, int i);
 void buildHeapEdge(HeapEdge*);
 void insertHeapEdge(HeapEdge*, Edge);
-Edge getRootHeapEdge(HeapEdge*);
+Edge* getRootHeapEdge(HeapEdge*);
 void deleteKeyEdge(HeapEdge*, int i);
 void editEdge(HeapEdge*, int i, int newValue, string);
 int searchDest(HeapEdge*, string);
