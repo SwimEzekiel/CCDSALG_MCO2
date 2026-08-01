@@ -3,6 +3,7 @@
 
 #include "graph.h"
 
+//Can be used to create an edge
 typedef struct Edge {
     Vertex *src;
     Vertex *dst;
@@ -10,6 +11,8 @@ typedef struct Edge {
     struct Edge *next;
 } Edge;
 
+//a structure of a regular heap, not used for heapedge
+//since it only keeps int values
 typedef struct Heap{
     int *arr;
     int size;
