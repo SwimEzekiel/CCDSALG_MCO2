@@ -53,4 +53,13 @@ int checkEdge(Graph*, string, string);
 void insertToPrintList(EdgeLL*, string, string, int weight);
 Vertex* getVertex(Graph*, int idx);
 
+// Prototype from BFS
+void BFS(Graph*, string);
+
+// Prototype from DFS
+void DFS(Graph*, string);
+
+// Prototype from checkpath
+int checkPath(Graph*, string, string);
+
 #endif

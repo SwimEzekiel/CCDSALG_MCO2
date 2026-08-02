@@ -42,23 +42,23 @@ int main(){
                 break;
             case 3:
                 scanf(" %256s", input1);
-                printf("getDegree(%s)\n", input1);
+                printf("%d\n", getDegree(graph, input1));
                 break;
             case 4:
                 scanf(" %256s %256s", input1, input2);
-                printf("checkEdge(%s, %s)\n", input1, input2);
+                printf("%d\n", checkEdge(graph, input1, input2));
                 break;
             case 5:
                 scanf(" %256s", input1);
-                printf("BFS(%s)\n", input1);
+                BFS(graph, input1);
                 break;
             case 6:
                 scanf(" %256s", input1);
-                printf("DFS(%s)\n", input1);
+                DFS(graph, input1);
                 break;
             case 7:
                 scanf(" %256s %256s", input1, input2);
-                printf("checkPath(%s, %s)\n", input1, input2);
+                printf("%d\n", checkPath(graph, input1, input2));
                 break;
             case 8:
                 MST(graph);
