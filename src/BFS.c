@@ -5,94 +5,77 @@
 #include "../include/queue.h"
  
 /*
-    Performs a Breadth first traversal of the graph starting from the
-    given vertex, printing each visited vertex's name on its own line.
- 
-    Since edges are stored one-directionally (addedge func), the graph is traversed as an undirected
-    graph by gathering both outgoing and incoming neighbors.
-    The queue itself only stores ints, so vertices are tracked by
-    their index in the graph's vertex list rather than by name directly.
-    When there's a choice between multiple unvisited neighbors, they are visited in lexicographical order.
+    Does a breadth first search starting from given vertex and prints
+    each vertex name it visits, one per line.
+    
+    Checks graph if not empty, finds start vertex, create visited array and queue then enqueue current/starting vertex. Main loop starts,
+    while queue is not empty, dequeues and prints current vertex. Gather the neighbors and sort them lexicographically, enqueues the 
+    unvisited neighbors, and loop till queue is empty. Clean up afterwards.
  
     @param *g - pointer to the graph
-    @param start - name of the vertex to start the traversal from
+    @param start - name of the vertex to start from
 */
 void BFS(Graph *g, string start){
-    int n = g->vertNum; // get total number of vertices in graph
-    if (n == 0)         // check if graph empty
+    int n = g->vertNum;     // get total number of vertices in graph
+    if (n == 0)             // check if graph empty
         return;
  
-    // build an array of vertices
-    // lexicographically sorted linked list
-    Vertex **verts = malloc(n * sizeof(Vertex*));
-    Vertex *cur = g->adjList;
-    for (int i = 0; i < n; i++){
-        verts[i] = cur;
-        cur = cur->nextVert;
-    }
- 
-    int startIdx = findVertex(g, start); // find index of starting vertex
-    if (startIdx == -1){
-        free(verts);
+    int startIdx = findVertex(g, start);
+    if (startIdx == -1) // vertex doesn't exist
         return;
-    }
  
-    int *visited = calloc(n, sizeof(int)); // create visited array (initialized to 0 cus 0 is unvisited)
+    int *visited = calloc(n, sizeof(int)); // create and fill array with 0's, 0 meaning unvisited
     Queue *q = createQueue();
  
     enqueue(q, startIdx);
     visited[startIdx] = 1;
  
-    while (!isQueueEmpty(q)){ // start of BFS loop
+    while (!isQueueEmpty(q)){ // main loop
         int curIdx = dequeue(q);
-        printf("%s\n", verts[curIdx]->name);
+        Vertex *curVert = getVertex(g, curIdx);
  
-        // create and gather all neighbors of curIdx in both directions
-        int *neighbors = malloc(n * sizeof(int));
-        int nCount = 0;
+        printf("%s\n", curVert->name);
  
-        Pair *p = verts[curIdx]->adj;
+        //count how many neighbors 
+        int neighborCount = 0;
+        Pair *p = curVert->adj;
         while (p != NULL){
-            neighbors[nCount++] = findVertex(g, p->name);
+            neighborCount++;
             p = p->next;
         }
  
-        for (int i = 0; i < n; i++){ // scans every other vertex's adj list for inc edges
-            if (i == curIdx) continue;
-            Pair *op = verts[i]->adj;
-            while (op != NULL){
-                if (strcmp(op->name, verts[curIdx]->name) == 0){
-                    neighbors[nCount++] = i;
-                    break;
-                }
-                op = op->next;
-            }
+        // put all the neighbor indexes into an array
+        int *neighbors = malloc(neighborCount * sizeof(int)); // create neighbor array
+        p = curVert->adj;
+        for (int i = 0; i < neighborCount; i++){
+            neighbors[i] = findVertex(g, p->name);
+            p = p->next;
         }
  
-        // sort the gathered neighbors lexicographically by name using insertion sort
-        for (int i = 1; i < nCount; i++){
+        // insertion sort the neighbors so they are visisted in lexicographical order
+        for (int i = 1; i < neighborCount; i++){
             int key = neighbors[i];
+            Vertex *keyVert = getVertex(g, key);
             int j = i - 1;
-            while (j >= 0 && strcmp(verts[neighbors[j]]->name, verts[key]->name) > 0){
+            // shift bigger names to the right to make room for key
+            while (j >= 0 && strcmp(getVertex(g, neighbors[j])->name, keyVert->name) > 0){
                 neighbors[j + 1] = neighbors[j];
                 j--;
             }
             neighbors[j + 1] = key;
         }
  
-        // visit unvisited neighbors in sorted order
-        for (int i = 0; i < nCount; i++){
-            int nIdx = neighbors[i];
-            if (!visited[nIdx]){    
-                visited[nIdx] = 1;
-                enqueue(q, nIdx);
+        // enqueue any neighbor that hasn't been visited yet
+        for (int i = 0; i < neighborCount; i++){
+            if (!visited[neighbors[i]]){
+                visited[neighbors[i]] = 1;
+                enqueue(q, neighbors[i]);
             }
         }
- 
+        // cleanup
         free(neighbors);
     }
  
-    free(verts);
     free(visited);
     destroyQueue(q);
 }

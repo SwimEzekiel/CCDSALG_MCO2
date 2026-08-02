@@ -21,34 +21,20 @@ Vertex* getVertexByName(Graph *g, string name){
 
 /*
     Computes the degree of a vertex, or how many edges touch it.
-    Since edges are only stored once, we count both directions: edges where the vertex IS the
-    source (its own adj list), and edges where it's the destination (it shows up in some other vertex's adj list).
-    
+ 
     @param *g - pointer to the graph
     @param name - name of the vertex to check
 */
 int getDegree(Graph *g, string name){
-    Vertex *cur = g->adjList;
-    Pair *p;
+    Vertex *v = getVertexByName(g, name);
+    if (v == NULL) // vertex doesn't exist
+        return 0;
+ 
     int degree = 0;
-
-    while (cur != NULL){
-        p = cur->adj;
-
-        if (strcmp(cur->name, name) == 0){
-            while (p != NULL){
-                degree++;
-                p = p->next;
-            }
-        } else {
-            while (p != NULL){
-                if (strcmp(p->name, name) == 0)
-                    degree++;
-                p = p->next;
-            }
-        }
-
-        cur = cur->nextVert;
+    Pair *p = v->adj;
+    while (p != NULL){
+        degree++;
+        p = p->next;
     }
     return degree;
 }
